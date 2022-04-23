@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="shortcut icon" type="image/x-icon" href="icons8_weather.ico" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Weather App</title>
+</head>
+
+<body>
+  <div class="app">
+    <main v-bind:class="app_background">
+      <div class="search-box">
+        <input type="search" name="search-bar" id="search-bar" placeholder="Enter City Name..." v-model="query"
+          @keypress="fetchcordinates"
+          autocomplete="address-level2" />
+      </div>
+      <div id="three-sandbox"></div>
+      <div class="weather-wrap" v-if="weathercheck != 'undefined'">
+        <div class="location-box">
+          <div class="location" v-if="weathercheck != 'undefined'">
+            {{ this.city.toUpperCase() }}
+          </div>
+          <div class="date">{{ currentDate() }}</div>
+        </div>
+      </div>
+      <div class="weather-box">
+        <div class="temp" v-if="weathercheck != 'undefined'">
+          {{ Math.round(weather.current.temp) }}<span id="degree">°</span>
+        </div>
+        <div class="weather" v-if="weathercheck != 'undefined'">
+          {{ weather.current.weather[0].description }}
+        </div>
+      </div>
+      <div class="next5days" v-if="weathercheck != 'undefined'">
+        <div class="day day1" id="dayy1" onclick="init_(this)">
+          <div id="three-bg"></div>
+          <img class="forcast-data" :src="icon1" alt="" />
+          <div class="day-items">
+            <p class="day-discription">
+              {{ weekforcast[0].weather[0].description }}
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data high">High:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[0].temp.max) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data low">Low:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[0].temp.min) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data humidity">Humidity:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[0].humidity) }}%
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data feels-like">Feels Like:</p>
+            <p class="forcast-data">{{ feels_like_time(0) }}°</p>
+          </div>
+        </div>
+        <div class="day day2" onclick="init_(this)">
+          <div id="three-bg"></div>
+          <img class="forcast-data" :src="icon2" alt="" />
+          <div class="day-items">
+            <p class="day-discription">
+              {{ weekforcast[1].weather[0].description }}
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data high">High:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[1].temp.max) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data low">Low:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[1].temp.min) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data humidity">Humidity:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[1].humidity) }}%
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data feels-like">Feels Like:</p>
+            <p class="forcast-data">{{ feels_like_time(1) }}°</p>
+          </div>
+        </div>
+        <div class="day day3" onclick="init_(this)">
+          <div id="three-bg"></div>
+          <img class="forcast-data" :src="icon3" alt="" />
+          <div class="day-items">
+            <p class="day-discription">
+              {{ weekforcast[2].weather[0].description }}
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data high">High:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[2].temp.max) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data low">Low:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[2].temp.min) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data humidity">Humidity:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[2].humidity) }}%
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data feels-like">Feels Like:</p>
+            <p class="forcast-data">{{ feels_like_time(2) }}°</p>
+          </div>
+        </div>
+        <div class="day day4" onclick="init_(this)">
+          <div id="three-bg"></div>
+          <img class="forcast-data" :src="icon4" alt="" />
+          <div class="day-items">
+            <p class="day-discription">
+              {{ weekforcast[3].weather[0].description }}
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data high">High:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[3].temp.max) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data low">Low:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[3].temp.min) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data humidity">Humidity:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[3].humidity) }}%
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data feels-like">Feels Like:</p>
+            <p class="forcast-data">{{ feels_like_time(3) }}°</p>
+          </div>
+        </div>
+        <div class="day day5" onclick="init_(this)">
+          <div id="three-bg"></div>
+          <img class="forcast-data" :src="icon5" alt="" />
+          <div class="day-items">
+            <p class="day-discription">
+              {{ weekforcast[4].weather[0].description }}
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data high">High:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[4].temp.max) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data low">Low:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[4].temp.min) }}°
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data humidity">Humidity:</p>
+            <p class="forcast-data">
+              {{ Math.round(weekforcast[4].humidity) }}%
+            </p>
+          </div>
+          <div class="day-items">
+            <p class="day-data feels-like">Feels Like:</p>
+            <p class="forcast-data">{{ feels_like_time(4) }}°</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="vueapp.js"></script>
+
+</html>
