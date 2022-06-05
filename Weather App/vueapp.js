@@ -26,6 +26,7 @@ const app = Vue.createApp({
       weathercheck: typeof this.weather,
       timezone_offset_: "",
       app_background: "",
+      weekday : ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
     };
   },
   methods: {
@@ -111,11 +112,11 @@ const app = Vue.createApp({
         return Math.round(this.weekforcast[index].feels_like.eve);
     },
   },
-  // computed: {
-  //   app_background() {
-  //     console.log(weather.current.temp > 23 ? " hot_weather" : "")
-  //     return weather.current.temp > 23 ? " hot_weather" : "";
-  //   },
-  // },
+  computed: {
+    current_day() {
+      const d = new Date();
+      return d.getDay();
+    },
+  },
 });
 app.mount(".app");
